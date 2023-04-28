@@ -15,7 +15,7 @@ DATA = {
         'колбаса, ломтик': 1,
         'сыр, ломтик': 1,
         'помидор, ломтик': 1,
-    },
+    }
     # можете добавить свои рецепты ;)
 }
 
@@ -28,3 +28,9 @@ DATA = {
 #     'ингредиент2': количество2,
 #   }
 # }
+
+
+def get_recipes(request):
+    template_name = 'calculator/index.html'
+    context = DATA
+    return render(request, template_name, context)
