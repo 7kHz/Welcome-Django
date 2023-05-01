@@ -19,5 +19,6 @@ from django.contrib import admin
 from calculator.views import get_recipes
 
 urlpatterns = [
+    path('admin/', admin.site.urls),
     path('omlet/', get_recipes)
 ]
