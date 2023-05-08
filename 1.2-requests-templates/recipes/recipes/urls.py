@@ -20,5 +20,5 @@ from calculator.views import get_recipes
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('omlet/', get_recipes)
+    path('<recipe>/', get_recipes),
 ]
