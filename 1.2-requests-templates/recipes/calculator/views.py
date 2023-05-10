@@ -21,7 +21,11 @@ DATA = {
 
 
 def get_recipes(request, recipe):
+    ingredient_dict = {}
     servings = int(request.GET.get('servings', 1))
-    context = {'recipe': DATA[recipe],
+    for key, value in DATA[recipe].items():
+        value *= servings
+        ingredient_dict[key] = value
+    context = {'recipe': ingredient_dict,
                'servings': servings}
     return render(request, 'calculator/index.html', context)

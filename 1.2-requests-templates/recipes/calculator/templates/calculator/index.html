@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-{% load mathfilters %}
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -7,11 +6,7 @@
 </head>
 <body>
 {% for ingredient, amount in recipe.items %}
-    {% if servings %}
-        <p>{{ ingredient }}: {{ amount|mul:servings }}</p>
-    {% else %}
-        <p>{{ ingredient }}: {{ amount }}</p>
-    {% endif %}
+    <p>{{ ingredient }}: {{ amount }}</p>
 {% empty %}
     <p>Такого рецепта не знаю :(</p>
 {% endfor %}
