@@ -1,8 +1,6 @@
 import csv
 
 from django.core.management.base import BaseCommand
-from django.http import HttpResponse
-
 from phones.models import Phone
 
 
