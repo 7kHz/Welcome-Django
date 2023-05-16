@@ -14,4 +14,3 @@ class Phone(models.Model):
         if not self.slug:
             self.slug = slugify(self.name)
         return super().save(*args, **kwargs)
-
