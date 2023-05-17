@@ -53,7 +53,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'netology_import_phones',
         'USER': 'postgres',
-        'PASSWORD': 'Pg19cska114',
+        'PASSWORD': '',
         'HOST': 'localhost',
         'PORT': '5432'
     }
