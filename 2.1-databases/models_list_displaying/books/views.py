@@ -1,12 +1,16 @@
 from django.shortcuts import render
 from books.models import Book
 
-
 def books_view(request):
-    context = {}
     template = 'books/books_list.html'
     books = Book.objects.all()
-    for book in books:
-        context_ = {'book': book}
-        context.update(context_)
+    context = {'books': books}
+    return render(request, template, context)
+
+
+def books_date(request, pub_date):
+    template = 'books/books_list.html'
+    books_ = Book.objects.all()
+    books = [book for book in books_ if book.pub_date.strftime('%Y-%m-%d') == pub_date]
+    context = {'books': books}
     return render(request, template, context)
