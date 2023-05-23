@@ -6,12 +6,14 @@ from .models import Article, Tag, ArticleScope
 
 class ScopeInlineFormset(BaseInlineFormSet):
     def clean(self):
-        # super().clean()
+        count = 0
         for form in self.forms:
-            cleaned_form = form.cleaned_data
-            print(cleaned_form)
-            if not form:
-                raise ValidationError('Тут всегда ошибка')
+            if form.cleaned_data['is_main']:
+                count += 1
+        if count == 0:
+            raise ValidationError('Основной раздел не указан!')
+        if count >= 2:
+            raise ValidationError('Основной раздел может быть один!')
         return super().clean()
 
 
