@@ -1,8 +1,9 @@
 # TODO: опишите необходимые обработчики, рекомендуется использовать generics APIView классы:
 # TODO: ListCreateAPIView, RetrieveUpdateAPIView, CreateAPIView
-from rest_framework.generics import ListAPIView
-from rest_framework.response import Response
+from django.forms import model_to_dict
+from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView
 from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import Sensor, Measurement
@@ -22,8 +23,32 @@ class SensorsView(APIView):
         sensors_data = SensorDetailSerializer(sensors, many=True)
         return Response(sensors_data.data)
 
+    #
     def post(self, request):
-        eps40 = Sensor(id=4, name='EPS40', description='Балкон').save()
-        add_eps40 = SensorDetailSerializer(eps40)
-        return Response(add_eps40.data)
+        post_sensor = Sensor.objects.create(name=request.data['name'],
+                                            description=request.data['description'])
+        return Response({'post': model_to_dict(post_sensor)})
 
+    def patch(self, request):
+        patch_sensor = Sensor.objects.update(name=request.data['name'],
+                                             description=request.data['description'])
+        return Response({'patch': model_to_dict(patch_sensor)})
+
+
+class SensorCreate(CreateAPIView):
+    serializer_class = SensorDetailSerializer
+
+    def post(self, request, *args, **kwargs):
+        dh780 = Sensor(id=5, name='DH780', description='Кладовка')
+        add_dh780 = SensorDetailSerializer(dh780)
+        return Response(add_dh780.data)
+
+
+class SensorUpdate(RetrieveUpdateAPIView):
+    serializer_class = SensorDetailSerializer
+    queryset = Sensor.objects.all()
+
+    def patch(self, request, *args, **kwargs):
+        dh780 = Sensor(id=5)
+        add_dh780 = SensorDetailSerializer(dh780)
+        return Response(add_dh780.data)
