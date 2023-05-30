@@ -30,8 +30,9 @@ class Tag(models.Model):
 class ArticleScope(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='scopes')
     tag = models.ForeignKey(Tag, on_delete=models.CASCADE, related_name='article_scopes')
-    is_main = models.BooleanField()
+    is_main = models.BooleanField(verbose_name='Основной')
 
     class Meta:
         verbose_name = 'Тематика статьи'
         verbose_name_plural = 'Тематики статьи'
+
