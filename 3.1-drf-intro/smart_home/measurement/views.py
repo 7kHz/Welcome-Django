@@ -13,7 +13,6 @@ class SensorsView(APIView):
         sensors_data = SensorsSerializer(sensors, many=True)
         return Response(sensors_data.data)
 
-    #
     def post(self, request):
         post_sensor = Sensor.objects.create(name=request.data['name'],
                                             description=request.data['description'])
