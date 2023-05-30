@@ -10,13 +10,6 @@ from .models import Sensor, Measurement
 from .serializers import SensorDetailSerializer, MeasurementSerializer
 
 
-# @api_view(['GET'])
-# def sensors_view(request):
-#     sensors = Sensor.objects.all()
-#     sensors_data = SensorDetailSerializer(sensors, many=True)
-#     return Response(sensors_data.data)
-
-
 class SensorsView(APIView):
     def get(self, request):
         sensors = Sensor.objects.all()
@@ -29,26 +22,23 @@ class SensorsView(APIView):
                                             description=request.data['description'])
         return Response({'post': model_to_dict(post_sensor)})
 
-    def patch(self, request):
-        patch_sensor = Sensor.objects.update(name=request.data['name'],
-                                             description=request.data['description'])
-        return Response({'patch': model_to_dict(patch_sensor)})
+    def patch(self, request, pk):
+        sensor = Sensor.objects.get(pk=pk)
+        serializer = SensorDetailSerializer(sensor, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+        return Response({'patch': serializer.data})
 
 
-class SensorCreate(CreateAPIView):
-    serializer_class = SensorDetailSerializer
+class MeasurementView(APIView):
+    def post(self, request):
+        post_measurement = Measurement.objects.create(sensor_id=request.data['sensor_id'],
+                                                      temperature=request.data['temperature'])
+        return Response({'post': model_to_dict(post_measurement)})
+    def __str__(self):
+        return self.post()
 
-    def post(self, request, *args, **kwargs):
-        dh780 = Sensor(id=5, name='DH780', description='Кладовка')
-        add_dh780 = SensorDetailSerializer(dh780)
-        return Response(add_dh780.data)
-
-
-class SensorUpdate(RetrieveUpdateAPIView):
-    serializer_class = SensorDetailSerializer
-    queryset = Sensor.objects.all()
-
-    def patch(self, request, *args, **kwargs):
-        dh780 = Sensor(id=5)
-        add_dh780 = SensorDetailSerializer(dh780)
-        return Response(add_dh780.data)
+    # def patch(self, request, *args, **kwargs):
+    #     dh780 = Sensor(id=5)
+    #     add_dh780 = SensorDetailSerializer(dh780)
+    #     return Response(add_dh780.data)
