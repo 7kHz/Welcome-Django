@@ -1,4 +1,3 @@
-
 from django.forms import model_to_dict
 from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView, RetrieveAPIView
 from rest_framework.response import Response
@@ -39,3 +38,4 @@ class MeasurementView(APIView):
 class SensorView(RetrieveAPIView):
     queryset = Sensor.objects.all()
     serializer_class = SensorDetailSerializer
+

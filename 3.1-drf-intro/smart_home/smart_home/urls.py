@@ -25,3 +25,4 @@ urlpatterns = [
     path('measurement/', MeasurementView.as_view()),
     path('sensor/<int:pk>/', SensorView.as_view())
 ]
+
