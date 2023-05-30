@@ -1,19 +1,17 @@
-# TODO: опишите необходимые обработчики, рекомендуется использовать generics APIView классы:
-# TODO: ListCreateAPIView, RetrieveUpdateAPIView, CreateAPIView
+
 from django.forms import model_to_dict
-from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView
-from rest_framework.decorators import api_view
+from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView, RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .models import Sensor, Measurement
-from .serializers import SensorDetailSerializer, MeasurementSerializer
+from .serializers import SensorsSerializer, SensorDetailSerializer, MeasurementSerializer
 
 
 class SensorsView(APIView):
     def get(self, request):
         sensors = Sensor.objects.all()
-        sensors_data = SensorDetailSerializer(sensors, many=True)
+        sensors_data = SensorsSerializer(sensors, many=True)
         return Response(sensors_data.data)
 
     #
@@ -33,12 +31,11 @@ class SensorsView(APIView):
 class MeasurementView(APIView):
     def post(self, request):
         post_measurement = Measurement.objects.create(sensor_id=request.data['sensor_id'],
-                                                      temperature=request.data['temperature'])
+                                                      temperature=request.data['temperature']
+                                                      )
         return Response({'post': model_to_dict(post_measurement)})
-    def __str__(self):
-        return self.post()
 
-    # def patch(self, request, *args, **kwargs):
-    #     dh780 = Sensor(id=5)
-    #     add_dh780 = SensorDetailSerializer(dh780)
-    #     return Response(add_dh780.data)
+
+class SensorView(RetrieveAPIView):
+    queryset = Sensor.objects.all()
+    serializer_class = SensorDetailSerializer
