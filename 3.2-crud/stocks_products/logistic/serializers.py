@@ -1,28 +1,37 @@
+from django.forms import model_to_dict
 from rest_framework import serializers
+
+from logistic.models import Product, Stock, StockProduct
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    # настройте сериализатор для продукта
-    pass
+    class Meta:
+        model = Product
+        fields = ['id', 'title', 'description']
 
 
 class ProductPositionSerializer(serializers.ModelSerializer):
-    # настройте сериализатор для позиции продукта на складе
-    pass
+    class Meta:
+        model = StockProduct
+        fields = ['id', 'stock_id', 'product_id', 'quantity', 'price']
 
 
 class StockSerializer(serializers.ModelSerializer):
     positions = ProductPositionSerializer(many=True)
 
-    # настройте сериализатор для склада
+    class Meta:
+        model = Stock
+        fields = ['id', 'address', 'positions']
 
     def create(self, validated_data):
         # достаем связанные данные для других таблиц
-        positions = validated_data.pop('positions')
+        positions = dict(validated_data)
+        print(positions)
 
         # создаем склад по его параметрам
         stock = super().create(validated_data)
 
+        post_product = StockProduct.objects.create(quantity=positions['quantity'])
         # здесь вам надо заполнить связанные таблицы
         # в нашем случае: таблицу StockProduct
         # с помощью списка positions
@@ -41,3 +50,6 @@ class StockSerializer(serializers.ModelSerializer):
         # с помощью списка positions
 
         return stock
+
+
+
