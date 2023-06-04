@@ -13,7 +13,7 @@ class ProductSerializer(serializers.ModelSerializer):
 class ProductPositionSerializer(serializers.ModelSerializer):
     class Meta:
         model = StockProduct
-        fields = ['id', 'stock_id', 'product_id', 'quantity', 'price']
+        fields = ['product', 'quantity', 'price']
 
 
 class StockSerializer(serializers.ModelSerializer):
@@ -24,32 +24,21 @@ class StockSerializer(serializers.ModelSerializer):
         fields = ['id', 'address', 'positions']
 
     def create(self, validated_data):
-        # достаем связанные данные для других таблиц
-        positions = dict(validated_data)
-        print(positions)
-
-        # создаем склад по его параметрам
+        positions = validated_data.pop('positions')
         stock = super().create(validated_data)
-
-        post_product = StockProduct.objects.create(quantity=positions['quantity'])
-        # здесь вам надо заполнить связанные таблицы
-        # в нашем случае: таблицу StockProduct
-        # с помощью списка positions
-
+        for position in positions:
+            post_stock = StockProduct.objects.create(quantity=position['quantity'],
+                                                     price=position['price'],
+                                                     product_id=position['product'].id,
+                                                     stock_id=stock.id)
         return stock
 
     def update(self, instance, validated_data):
-        # достаем связанные данные для других таблиц
         positions = validated_data.pop('positions')
-
-        # обновляем склад по его параметрам
         stock = super().update(instance, validated_data)
-
-        # здесь вам надо обновить связанные таблицы
-        # в нашем случае: таблицу StockProduct
-        # с помощью списка positions
-
+        for position in positions:
+            patch_stock = StockProduct.objects.update_or_create(quantity=position['quantity'],
+                                                                price=position['price'],
+                                                                product_id=position['product'].id,
+                                                                stock_id=stock.id)
         return stock
-
-
-
