@@ -1,3 +1,5 @@
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
@@ -12,13 +14,16 @@ class AdvertisementViewSet(ModelViewSet):
 
     queryset = Advertisement.objects.all()
     serializer_class = AdvertisementSerializer
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['status']
+
+    # search_fields = ['created_at']
 
     def view_filter(self):
         model_filter = AdvertisementFilter(self.request.GET, queryset=Advertisement.objects.all())
         filtered_queryset = model_filter.qs
+        print(filtered_queryset)
         return filtered_queryset
-
-    filterset_fields = ['status']
 
     def get_permissions(self):
         """Получение прав для действий."""
