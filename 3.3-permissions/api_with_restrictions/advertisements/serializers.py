@@ -37,5 +37,3 @@ class AdvertisementSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Created maximum number of open ads '
                                               '(by default, no more than 10)')
         return data
-
-

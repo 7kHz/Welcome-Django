@@ -26,5 +26,4 @@ router.register('advertisements', AdvertisementViewSet)
 urlpatterns = [
     path('api/', include(router.urls)),
     path('admin/', admin.site.urls),
-    path('created_at/', AdvertisementViewSet.view_filter)
 ] + router.urls
