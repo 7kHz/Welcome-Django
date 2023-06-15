@@ -1,7 +1,8 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.viewsets import ModelViewSet
+from django.contrib.auth.decorators import login_required
 
 from advertisements.filters import AdvertisementFilter
 from advertisements.models import Advertisement
@@ -22,5 +23,11 @@ class AdvertisementViewSet(ModelViewSet):
         if self.action == "create":
             return [IsAuthenticated()]
         if self.action in ["update", "partial_update", "destroy"]:
-            return [IsAuthenticated(), IsOwner()]
+            return [IsAuthenticated(), IsOwner(), IsAdminUser()]
         return []
+
+    @login_required
+    def is_admin(self):
+        admin_name = self.request.user.username
+        if self.action in ["update", "partial_update", "destroy"] and admin_name:
+            return [IsAdminUser()]
