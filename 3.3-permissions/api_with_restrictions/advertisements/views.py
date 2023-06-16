@@ -16,18 +16,13 @@ class AdvertisementViewSet(ModelViewSet):
     serializer_class = AdvertisementSerializer
     filter_backends = [DjangoFilterBackend, SearchFilter]
     filterset_class = AdvertisementFilter
-    filterset_fields = ['status', 'creator']
 
     def get_permissions(self):
         """Получение прав для действий."""
         if self.action == "create":
             return [IsAuthenticated()]
         if self.action in ["update", "partial_update", "destroy"]:
-            return [IsAuthenticated(), IsOwner(), IsAdminUser()]
+            if self.request.user.is_staff:
+                return [IsAdminUser()]
+            return [IsAuthenticated(), IsOwner()]
         return []
-
-    @login_required
-    def is_admin(self):
-        admin_name = self.request.user.username
-        if self.action in ["update", "partial_update", "destroy"] and admin_name:
-            return [IsAdminUser()]
