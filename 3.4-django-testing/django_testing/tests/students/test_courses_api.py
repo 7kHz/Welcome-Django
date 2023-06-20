@@ -1,6 +1,7 @@
 import pytest
 from model_bakery import baker
 from rest_framework.test import APIClient
+from django.urls import reverse
 
 from students.models import Course, Student
 
@@ -18,10 +19,9 @@ def client():
 
 
 @pytest.mark.django_db
-# def test_course():
-#     client = APIClient()
-#     response = client.get('/api/v1/courses/', {'name': 'Philosophy'}, format='json')
-#     data = response.json()
-#     assert data == response
-#     assert response.status_code == 200
-#     assert response[0]['name'] == 'Philosophy'
+def test_course():
+    client = APIClient()
+    redirect_url = reverse("courses")
+    response = client.get(redirect_url)
+    assert response.status_code == 200
+    # assert data[0]['name'] == 'Philosophy'
