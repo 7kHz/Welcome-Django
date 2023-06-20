@@ -21,7 +21,8 @@ def client():
 @pytest.mark.django_db
 def test_course():
     client = APIClient()
-    redirect_url = reverse("courses")
-    response = client.get(redirect_url)
+    Course.objects.create(name='Geography')
+    # redirect_url = reverse("courses")
+    response = client.get('/api/v1/students/', {'name': 'Math'})
+    data = response.json()
     assert response.status_code == 200
-    # assert data[0]['name'] == 'Philosophy'
