@@ -11,18 +11,70 @@ def client():
     return APIClient()
 
 
-# @pytest.fixture
-# def course_factory():
-#     def course(*args, **kwargs):
-#         return baker.make(Course, *args, **kwargs)
-#     return course
+@pytest.fixture
+def course_factory():
+    def course(*args, **kwargs):
+        return baker.make(Course, *args, **kwargs)
+
+    return course
 
 
 @pytest.mark.django_db
-def test_course():
-    client = APIClient()
-    # redirect_url = reverse("courses")
-    response = client.get('/api/v1/courses/')
-    data = response.json()
+def test_course(client, course_factory):
+    courses = course_factory(_quantity=3)
+    URL = reverse('courses-detail', args=[courses[0].id])
+    response = client.get(URL)
     assert response.status_code == 200
-    assert data[1]['name'] == 'Math'
+    assert response.data['id'] == courses[0].id
+
+
+@pytest.mark.django_db
+def test_course_list(client, course_factory):
+    course = course_factory(_quantity=5)
+    URL = reverse('courses-list')
+    response = client.get(URL)
+    assert response.status_code == 200
+    for i, v in enumerate(response.data):
+        assert v['name'] == course[i].name
+
+
+@pytest.mark.django_db
+def test_course_filter_id(client, course_factory):
+    course = course_factory(_quantity=5)
+    response = client.get('/api/v1/courses/', {'id': course[0].id})
+    assert response.status_code == 200
+    assert response.data[0]['id'] == course[0].id
+
+
+@pytest.mark.django_db
+def test_course_filter_name(client, course_factory):
+    course = course_factory(_quantity=5)
+    response = client.get('/api/v1/courses/', {'name': course[1].name})
+    assert response.status_code == 200
+    assert response.data[0]['name'] == course[1].name
+
+
+@pytest.mark.django_db
+def test_create_course(client):
+    URL = reverse('courses-list')
+    response = client.post(URL, {'name': 'biology'})
+    assert response.status_code == 201
+    assert response.data['name'] == 'biology'
+
+
+@pytest.mark.django_db
+def test_update_course(client, course_factory):
+    course = course_factory(_quantity=5)
+    URL = reverse('courses-detail', args=[course[1].id])
+    response = client.patch(URL, {'name': 'math'})
+    assert response.status_code == 200
+    assert response.data['name'] == 'math'
+
+
+@pytest.mark.django_db
+def test_delete_course(client, course_factory):
+    course = course_factory(_quantity=5)
+    URL = reverse('courses-detail', args=[course[1].id])
+    response = client.delete(URL)
+    assert response.status_code == 204
+    assert response.data is None
