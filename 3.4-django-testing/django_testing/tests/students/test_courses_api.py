@@ -15,7 +15,6 @@ def client():
 def course_factory():
     def course(*args, **kwargs):
         return baker.make(Course, *args, **kwargs)
-
     return course
 
 
@@ -78,3 +77,9 @@ def test_delete_course(client, course_factory):
     response = client.delete(URL)
     assert response.status_code == 204
     assert response.data is None
+
+
+# @pytest.mark.parametrize('count1, count2', [(10, 20)])
+# def test_student_count(count1, count2):
+#     assert count1 == count2
+
