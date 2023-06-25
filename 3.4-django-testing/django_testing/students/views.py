@@ -22,9 +22,9 @@ class StudentViewSet(ModelViewSet):
     serializer_class = StudentSerializer
 
 
-def get_courses(request):
-    client = APIClient()
-    response = request.GET.get('/api/v1/courses/', {'name': 'Philosophy'})
-    data = response.json()
-    context = {'data': data}
-    return render(request, 'django_testing/templates/get_courses.html', context)
+# def get_courses(request):
+#     client = APIClient()
+#     response = request.GET.get('/api/v1/courses/', {'name': 'Philosophy'})
+#     data = response.json()
+#     context = {'data': data}
+#     return render(request, 'django_testing/templates/get_courses.html', context)
