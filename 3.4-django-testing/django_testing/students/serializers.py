@@ -13,3 +13,9 @@ class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         fields = ['id', 'name', 'birth_date']
+
+    def validate(self, attrs):
+        student_count = Student.objects.count()
+        if student_count >= 20:
+            raise serializers.ValidationError('Created maximum number of students, by default, no more than 20')
+        return attrs
