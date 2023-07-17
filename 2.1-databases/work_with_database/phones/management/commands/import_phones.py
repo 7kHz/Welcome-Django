@@ -12,7 +12,6 @@ class Command(BaseCommand):
         with open('phones.csv', 'r') as file:
             phones = list(csv.DictReader(file, delimiter=';'))
         for phone in phones:
-            phones_ = Phone.objects.create(name='', )
             phones_data = Phone(
                 name=phone['name'],
                 price=phone['price'],
