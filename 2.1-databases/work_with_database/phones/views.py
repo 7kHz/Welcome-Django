@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
@@ -35,9 +35,7 @@ def show_product(request, slug):
     return render(request, template, context)
 
 
-def get_time():
+def get_time(request):
     current_time = datetime.now().time()
     msg = f'Текущее время: {current_time}'
     return HttpResponse(msg)
-
-
