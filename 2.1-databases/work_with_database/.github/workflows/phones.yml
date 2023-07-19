@@ -8,7 +8,7 @@ jobs:
   tests:
     runs-on: ubuntu-22.04
     env:
-      SECRET_KEY: ${{ secrets.DJANGO_SECRET }}
+      SECRET_KEY: ${{ secrets.SECRET_KEY }}
       DEBUG: '0'
       ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
       DB_ENGINE: ${{ secrets.DB_ENGINE }}
@@ -47,8 +47,8 @@ jobs:
       - name: Тестирование кода
         run: python3 manage.py test
         env:
-          SECRET_KEY: ${{ env.DJANGO_SECRET }}
-          DEBUG: {{ env.DEBUG }}
+          SECRET_KEY: ${{ env.SECRET_KEY }}
+          DEBUG: ${{ env.DEBUG }}
           ALLOWED_HOSTS: ${{ env.ALLOWED_HOSTS }}
           DB_ENGINE: ${{ env.DB_ENGINE }}
           DB_NAME: ${{ env.DB_NAME }}

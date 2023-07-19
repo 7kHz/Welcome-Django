@@ -88,6 +88,3 @@ Content-Type: application/json
 GET {{baseUrl}}/stocks/?products=2
 Content-Type: application/json
 
-Привет, поправьте здесь:
-for item in positions:
-    i = StockProduct.objects.create(stock=, product=,)
