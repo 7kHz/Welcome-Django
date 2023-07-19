@@ -23,5 +23,5 @@ urlpatterns = [
     path('', phones.views.index),
     path('catalog/', phones.views.show_catalog, name='catalog'),
     path('catalog/<slug:slug>/', phones.views.show_product, name='phone'),
-    path('current_time', phones.views.get_time)
+    path('current_time/', phones.views.get_time)
 ]
