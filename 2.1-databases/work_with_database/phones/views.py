@@ -1,3 +1,6 @@
+import datetime
+
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from phones.models import Phone
 
@@ -30,3 +33,11 @@ def show_product(request, slug):
                         'phone': phone}
             context.update(context_)
     return render(request, template, context)
+
+
+def get_time():
+    current_time = datetime.now().time()
+    msg = f'Текущее время: {current_time}'
+    return HttpResponse(msg)
+
+

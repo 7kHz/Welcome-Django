@@ -1,3 +1,2 @@
-from django.contrib import admin
-from .models import Phone
-
+# from django.contrib import admin
+# from .models import Phone

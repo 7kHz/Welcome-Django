@@ -1,2 +1,6 @@
 django
 psycopg2-binary
+python-dotenv
+Pillow
+gunicorn
+flake8
