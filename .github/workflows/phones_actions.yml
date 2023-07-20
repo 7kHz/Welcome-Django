@@ -42,7 +42,7 @@ jobs:
         run: pip install -r 2.1-databases/work_with_database/requirements.txt
 
       - name: Линтинг кода
-        run: flake8 phones --exclude phones/migrations
+        run: flake8 2.1-databases/work_with_database
 
       - name: Тестирование кода
         run: python3 manage.py test
