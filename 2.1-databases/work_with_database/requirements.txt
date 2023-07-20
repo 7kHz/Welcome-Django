@@ -4,4 +4,3 @@ python-dotenv
 Pillow
 gunicorn
 flake8
-djangorestframework
