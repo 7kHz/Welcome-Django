@@ -1,5 +1,0 @@
-[flake8]
-exclude =
-	phones/migrations
-	main
-	venv
